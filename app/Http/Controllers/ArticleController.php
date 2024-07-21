@@ -61,10 +61,10 @@ class ArticleController extends Controller
         dump($collection->whereStrict('name', 'Dary'));
 
         // whereBetween()
-        dump($collection->whereBetween('age', [17, 27]));
+        dump($collection->whereBetween('age', [20, 27]));
 
         // whereIn()
-        dump(User::whereIn('role', $roles)->count());
+        dump("WhereIn method with count(): ".User::whereIn('role', $roles)->count());
 
         // whereNotInt()
         dump(User::whereNotIn('role', ['admin', 'super_admin'])->get());
