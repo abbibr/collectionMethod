@@ -4,7 +4,7 @@ Laravel popular collection methods for junior developers. I showed some examples
 
 ## concat() method
 
-//
+<img src="images/concat.png">
 
 ### collapse() method
 
