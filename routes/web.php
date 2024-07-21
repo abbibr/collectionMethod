@@ -24,5 +24,6 @@ Route::prefix('/collection')->group(function() {
         Route::get('/whereClauses', 'whereClauses')->name('collection.whereClauses');
         Route::get('/mapMethod', 'mapMethod')->name('collection.mapMethod');
         Route::get('/conExOn', 'conExOn')->name('collection.conExOn');
+        Route::get('/otherMethods', 'otherMethods')->name('collection.otherMethods');
     });
 });

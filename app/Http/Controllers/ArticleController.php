@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Article;
 use App\Models\User;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Hash;
 
 class ArticleController extends Controller
@@ -165,5 +166,48 @@ class ArticleController extends Controller
         });
 
         dump($eloquentFiltered);
+    }
+
+    public function otherMethods() {
+        // pluck()
+        $articles = Article::pluck('title')->map(function($value) {
+            return Str::upper($value);
+        });
+
+        // return $articles;
+
+        $collection = collect([
+            [
+                'name' => 'ibrohim',
+                'surname' => 'abbosov'
+            ],
+            [
+                'name' => 'Dilnoza',
+                'surname' => 'Nishanova'
+            ]
+        ]);
+
+        $collection2 = collect([
+            [
+                'name' => 'samariddin',
+                'surname' => 'norboyev'
+            ],
+            [
+                'name' => 'Sevinch',
+                'surname' => 'Sayfutdinova'
+            ]
+        ]);
+
+        // councut()
+        $concut = $collection->concat($collection2);
+
+        $final = $concut->map(function($value) {
+            $surname = Str::ucfirst($value['surname']);
+            $name = Str::ucfirst($value['name']);
+
+            return $name . " " . $surname;
+        });
+
+        return $final;
     }
 }
