@@ -77,27 +77,29 @@ class ArticleController extends Controller
     }
 
     public function mapMethod() {
+        $random = rand(1, 1000);
+
         $collection = collect([
             [
-                'name' => 'Ibrohim', 
+                'name' => "Ibrohim $random", 
                 'company' => 'Abbibr', 
-                'email' => 'aaa@aaa.aaa',
+                'email' => "aaa@aaa$random.aaa",
                 'role' => 'admin',
-                'password' => Hash::make('admin')
+                'password' => Hash::make("admin")
             ],
             [
-                'name' => 'Bill Gates', 
+                'name' => "Bill Gates $random", 
                 'company' => 'Microsoft', 
-                'email' => 'bbb@bbb.bbb',
+                'email' => "bbb@bbb$random.bbb",
                 'role' => 'super_admin',
-                'password' => Hash::make('super_admin')
+                'password' => Hash::make("super_admin")
             ],
             [
-                'name' => 'Elon Musk', 
+                'name' => "Elon Musk $random", 
                 'company' => 'Tesla', 
-                'email' => 'ccc@ccc.ccc',
+                'email' => "ccc@ccc$random.ccc",
                 'role' => 'user',
-                'password' => Hash::make('user')
+                'password' => Hash::make("user")
             ]
         ]);
 
@@ -105,9 +107,13 @@ class ArticleController extends Controller
             return Arr::except($value, ['company']);
         });
 
-        User::insert($filtered->toArray());
-
-        return response()->json('success', 200);
+        if (User::where('email', $filtered[0]['email'])->first()) {
+            return "These data exist in database: " . $filtered[0]['email'];
+        }
+        else {
+            User::insert($filtered->toArray());
+            return response()->json($collection, 200);
+        }
     }
 
     public function conExOn() {
@@ -169,12 +175,14 @@ class ArticleController extends Controller
     }
 
     public function otherMethods() {
+        $start_time = microtime();
+
         // pluck()
         $articles = Article::pluck('title')->map(function($value) {
             return Str::upper($value);
         });
 
-        // return $articles;
+        dump($articles);
 
         $collection = collect([
             [
@@ -198,7 +206,7 @@ class ArticleController extends Controller
             ]
         ]);
 
-        // councut()
+        // concat()
         $concut = $collection->concat($collection2);
 
         $final = $concut->map(function($value) {
@@ -208,6 +216,45 @@ class ArticleController extends Controller
             return $name . " " . $surname;
         });
 
-        return $final;
+        dump($final);
+
+
+        $collection = collect([
+            [ 
+                'id' => 1,
+                'items' => [
+                    [
+                        'name' => 'ibrohim',
+                        'surname' => 'abbosov'
+                    ],
+                    [
+                        'name' => 'Dilnoza',
+                        'surname' => 'Nishanova'
+                    ]
+                ]
+            ],
+            [
+                'id' => 2,
+                'items' => [
+                    [
+                        'name' => 'samariddin',
+                        'surname' => 'norboyev'
+                    ],
+                    [
+                        'name' => 'Sevinch',
+                        'surname' => 'Sayfutdinova'
+                    ]
+                ]
+            ]
+        ]);
+
+        // $articles = Article::all();
+        // $users = User::all();
+
+        dump($collection->pluck('items')->collapse());
+
+        $end_time = microtime();
+
+        return number_format((float)$end_time - (float)$start_time, 5);
     }
 }
